@@ -52,7 +52,6 @@ function HandleChanges() {
     var closeFile = document.createElement("span");
     fileName.className = "file uploaded_file";
     fileName.innerHTML = fileInput.files[i].name;
-    closeFile.innerText = "X";
     closeFile.className = "delete_file";
   
     fileName.appendChild(closeFile);
