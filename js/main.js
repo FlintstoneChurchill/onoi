@@ -1,16 +1,18 @@
 window.onload = WindowOnLoad;
 var fileInput = document.getElementById("file");
-console.log(fileInput);
-var fileName = document.createElement("div");
-fileName.className = "file";
+var wrap = document.getElementById("wrapper");
 var activeButton = document.createElement("div");
+
+var files = document.getElementsByClassName('uploaded_file');
 
 var handleBtn = document.getElementById("handleBtn");
 var handleModal = document.getElementById("handleModal");
-var backdrop = document.getElementById('backdrop');
-handleBtn.addEventListener("click", function(e) {
+var backdrop = document.getElementById("backdrop");
+if (handleBtn) {
+  handleBtn.addEventListener("click", function(e) {
     toggleModal(e, "block");
-});
+  });
+}
 
 var closeModalBtn = document.getElementsByClassName("close_modal");
 if (closeModalBtn) {
@@ -22,14 +24,13 @@ if (closeModalBtn) {
 }
 
 function toggleModal(e, displayType) {
-    e.preventDefault();
-    backdrop.style.display = displayType;
-    handleModal.style.display = displayType;
+  e.preventDefault();
+  backdrop.style.display = displayType;
+  handleModal.style.display = displayType;
 }
 
 function WindowOnLoad() {
   if (fileInput) {
-    var wrap = document.getElementById("wrapper");
     fileInput.value = "";
     fileInput.onchange = HandleChanges;
     fileInput.className = "customFile";
@@ -37,13 +38,24 @@ function WindowOnLoad() {
     activeButton.innerHTML = "Добавить документ";
 
     wrap.appendChild(activeButton);
-    wrap.appendChild(fileName);
   }
 }
 
 function HandleChanges() {
-  var file = fileInput.value;
-  var fileTitle = file.match(/[^\\]+\.[^\\.]+$/g);
-  fileName.innerHTML = fileTitle;
-  console.log(fileTitle);
+  if (files) {
+    for (var f = 0; f < files.length; f++) {
+      wrap.removeChild(files[f]);
+    }
+  }
+  for (var i = 0; i < fileInput.files.length; i++) {
+    var fileName = document.createElement("div");
+    var closeFile = document.createElement("span");
+    fileName.className = "file uploaded_file";
+    fileName.innerHTML = fileInput.files[i].name;
+    closeFile.innerText = "X";
+    closeFile.className = "delete_file";
+  
+    fileName.appendChild(closeFile);
+    wrap.appendChild(fileName);
+  }
 }
